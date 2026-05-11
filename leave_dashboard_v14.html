@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>세인바이오 연월차 현황 대시보드 · 2026년 4-5월</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --navy: #0F4C5C;
+  --navy-dark: #0A3642;
+  --navy-light: #1F6B7E;
+  --navy-pale: #E8EFF1;
+  --navy-ghost: #F4F8F9;
+  --copper: #B87333;
+  --copper-light: #D89357;
+  --copper-pale: #FAF1E6;
+  --ink: #1A2332;
+  --ink-2: #3F4A5C;
+  --ink-3: #6B7585;
+  --ink-4: #9AA3B2;
+  --bg: #FAFAF7;
+  --surface: #FFFFFF;
+  --surface-2: #F5F6F3;
+  --line: #E5E7E2;
+  --line-strong: #CCD0C8;
+  --red: #B42318;
+  --red-pale: #FEF3F2;
+  --amber: #B54708;
+  --amber-pale: #FEF6EE;
+  --green: #067647;
+  --green-pale: #ECFDF3;
+  --blue: #175CD3;
+  --blue-pale: #EFF4FF;
+  --shadow-sm: 0 1px 2px rgba(15, 76, 92, 0.04);
+  --shadow-md: 0 2px 8px rgba(15, 76, 92, 0.06);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'tnum' on;
+}
+.serif { font-family: 'Noto Serif KR', serif; font-weight: 500; }
+.tabular { font-feature-settings: 'tnum' on; }
+
+.layout { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+
+/* Sidebar */
+aside.sidebar {
+  background: var(--navy);
+  color: #fff;
+  padding: 32px 24px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+.brand {
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+}
+.brand-mark {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  color: var(--copper-light);
+}
+.brand-sub {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.6);
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+.nav { list-style: none; }
+.nav li { margin-bottom: 4px; }
+.nav a {
+  display: block;
+  padding: 10px 12px;
+  color: rgba(255,255,255,0.75);
+  text-decoration: none;
+  font-size: 13px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+  border-left: 2px solid transparent;
+}
+.nav a:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.nav a.active { 
+  background: rgba(255,255,255,0.08); 
+  color: #fff; 
+  border-left-color: var(--copper);
+}
+.sidebar-foot {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  right: 24px;
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.05em;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 12px;
+}
+
+/* Main */
+main {
+  padding: 40px 48px 80px;
+  max-width: 1400px;
+}
+
+/* Header */
+header.page-head {
+  margin-bottom: 40px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.title-block .eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--copper);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.title-block h1 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--navy-dark);
+  line-height: 1.2;
+}
+.title-block .subtitle {
+  font-size: 14px;
+  color: var(--ink-3);
+  margin-top: 8px;
+}
+.head-meta { text-align: right; }
+.head-meta .date {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 16px;
+  color: var(--navy);
+  font-weight: 500;
+}
+.head-meta .date-sub {
+  font-size: 12px;
+  color: var(--ink-4);
+  margin-top: 2px;
+}
+.head-meta .source-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ink-3);
+  margin-top: 10px;
+  padding: 4px 10px;
+  background: var(--navy-pale);
+  border-radius: 12px;
+}
+.head-meta .source-chip::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+/* Section */
+section { margin-bottom: 56px; }
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.section-head h2 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--navy-dark);
+  letter-spacing: -0.01em;
+}
+.section-head h2::before {
+  content: '';
+  display: inline-block;
+  width: 3px; height: 18px;
+  background: var(--copper);
+  margin-right: 12px;
+  vertical-align: -2px;
+}
+.section-head .aside-label {
+  font-size: 11px;
+  color: var(--ink-4);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* KPI grid */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.kpi {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 20px 22px;
+  position: relative;
+  overflow: hidden;
+}
+.kpi::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--navy);
+}
+.kpi.alt::before { background: var(--copper); }
+.kpi .kpi-label {
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.kpi .kpi-value {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--navy-dark);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.kpi .kpi-value .unit {
+  font-size: 16px;
+  color: var(--ink-3);
+  font-weight: 400;
+  margin-left: 2px;
+}
+.kpi .kpi-sub {
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-top: 6px;
+}
+.kpi .kpi-sub strong {
+  color: var(--navy);
+  font-weight: 600;
+}
+
+/* Scenario cards */
+.scenarios {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.scenario {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 24px;
+  position: relative;
+}
+.scenario .badge {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.scenario.common { border-top: 3px solid var(--red); }
+.scenario.common .badge { background: var(--red-pale); color: var(--red); }
+.scenario.bonus { border-top: 3px solid var(--copper); }
+.scenario.bonus .badge { background: var(--copper-pale); color: var(--copper); }
+.scenario.actual { border-top: 3px solid var(--green); }
+.scenario.actual .badge { background: var(--green-pale); color: var(--green); }
+.scenario .headline {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--navy-dark);
+  margin-bottom: 4px;
+  letter-spacing: -0.02em;
+}
+.scenario .headline .unit { font-size: 16px; color: var(--ink-3); font-weight: 400; }
+.scenario .caption {
+  font-size: 13px;
+  color: var(--ink-2);
+  margin-bottom: 14px;
+}
+.scenario .breakdown {
+  font-size: 12px;
+  color: var(--ink-3);
+  line-height: 1.75;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line-strong);
+}
+.scenario .breakdown strong { color: var(--navy); font-weight: 500; }
+
+/* Calendar */
+.cal-wrap { 
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.cal-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.cal-title h3 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 18px;
+  color: var(--navy-dark);
+  font-weight: 600;
+}
+.cal-title .cal-stat {
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.cal-title .cal-stat strong { color: var(--navy); font-weight: 600; }
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.cal-head {
+  padding: 8px 0;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--ink-3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.cal-head.sun { color: var(--red); }
+.cal-head.sat { color: var(--blue); }
+.cal-cell {
+  min-height: 92px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.cal-cell.weekend { background: var(--surface-2); border-color: var(--line); }
+.cal-cell.holiday { background: var(--red-pale); border-color: #FED7D4; }
+.cal-cell.today { border: 2px solid var(--copper); box-shadow: 0 0 0 3px var(--copper-pale); }
+.cal-cell.empty { visibility: hidden; }
+.cal-num {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cal-cell.weekend .cal-num.sun { color: var(--red); }
+.cal-cell.weekend .cal-num.sat { color: var(--blue); }
+.cal-cell.holiday .cal-num { color: var(--red); }
+.cal-today-badge {
+  font-size: 9px;
+  color: var(--copper);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+.holiday-name {
+  font-size: 10px;
+  color: var(--red);
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+.leave-pill {
+  font-size: 10px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  line-height: 1.35;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+.leave-pill:hover { transform: translateX(2px); filter: brightness(1.08); }
+.leave-pill .pn { font-weight: 500; }
+.leave-pill .pt { font-weight: 400; opacity: 0.82; margin-left: 4px; font-size: 9px; }
+.leave-pill.full { background: var(--navy); color: #fff; font-weight: 500; }
+.leave-pill.half { background: var(--navy-pale); color: var(--navy-dark); border: 0.5px solid var(--navy-light); }
+.leave-pill.quarter { background: transparent; color: var(--navy); border: 1px dashed var(--navy-light); }
+
+.clickable-name {
+  cursor: pointer;
+  color: var(--navy-dark);
+  border-bottom: 1px dotted transparent;
+  transition: all 0.15s;
+}
+.clickable-name:hover {
+  color: var(--copper);
+  border-bottom-color: var(--copper);
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 54, 66, 0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; animation: modalFade 0.15s ease; }
+@keyframes modalFade { from { opacity: 0; } to { opacity: 1; } }
+.modal {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 28px 32px;
+  max-width: 540px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(10, 54, 66, 0.25);
+  animation: modalSlide 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes modalSlide { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.modal-head h3 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 24px;
+  color: var(--navy-dark);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.modal-head .modal-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--copper);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: var(--ink-3);
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 6px;
+  transition: all 0.15s;
+  line-height: 1;
+}
+.modal-close:hover { background: var(--navy-pale); color: var(--navy); }
+.modal-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.modal-stat {
+  background: var(--navy-pale);
+  padding: 18px 20px;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.modal-stat::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--navy);
+}
+.modal-stat.accent::before { background: var(--copper); }
+.modal-stat-label {
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.modal-stat-value {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 28px;
+  color: var(--navy-dark);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.modal-stat-value .unit { font-size: 14px; color: var(--ink-3); font-weight: 400; margin-left: 2px; }
+.modal-section { margin-bottom: 20px; }
+.modal-section:last-child { margin-bottom: 0; }
+.modal-section h4 {
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.modal-monthly-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+.modal-month {
+  background: var(--surface-2);
+  padding: 10px 8px;
+  border-radius: 6px;
+  text-align: center;
+  border: 1px solid var(--line);
+}
+.modal-month-label {
+  font-size: 11px;
+  color: var(--ink-3);
+  margin-bottom: 4px;
+}
+.modal-month-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy-dark);
+  font-feature-settings: 'tnum' on;
+}
+.modal-month.empty { background: transparent; }
+.modal-month.empty .modal-month-value { color: var(--ink-4); font-weight: 400; }
+.modal-records { list-style: none; padding: 0; margin: 0; }
+.modal-records li {
+  padding: 9px 14px;
+  border-left: 2px solid var(--navy-light);
+  background: var(--surface-2);
+  margin-bottom: 5px;
+  border-radius: 0 4px 4px 0;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.modal-records li.full { border-left-color: var(--navy); }
+.modal-records li.half { border-left-color: var(--navy-light); }
+.modal-records li.quarter { border-left-color: var(--ink-4); }
+.modal-record-date {
+  font-weight: 600;
+  color: var(--navy);
+  flex-shrink: 0;
+  min-width: 40px;
+}
+.modal-record-type {
+  color: var(--ink);
+  font-weight: 500;
+  min-width: 70px;
+}
+.modal-record-note {
+  font-size: 11px;
+  color: var(--ink-3);
+  font-style: italic;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-bottom: 16px;
+  font-size: 11px;
+  color: var(--ink-3);
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-swatch { width: 16px; height: 16px; border-radius: 3px; display: inline-block; }
+
+/* Table */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+th, td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+th {
+  background: var(--navy-ghost);
+  color: var(--navy-dark);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+td.num, th.num { text-align: right; font-feature-settings: 'tnum' on; }
+td.total { background: var(--navy-pale); font-weight: 600; color: var(--navy-dark); }
+tr:last-child td { border-bottom: none; }
+tr.total-row { background: var(--navy-pale); }
+tr.total-row td { font-weight: 600; color: var(--navy-dark); }
+tr.total-row td:first-child { letter-spacing: 0.05em; }
+td.name { font-weight: 500; color: var(--ink); }
+td.detail { color: var(--ink-3); font-size: 12px; }
+tr:hover td { background: var(--navy-ghost); }
+tr.total-row:hover td { background: var(--navy-pale); }
+
+.rank-dot {
+  display: inline-block;
+  width: 22px; height: 22px;
+  line-height: 22px;
+  text-align: center;
+  border-radius: 50%;
+  background: var(--navy-pale);
+  color: var(--navy);
+  font-size: 11px;
+  font-weight: 600;
+  margin-right: 8px;
+}
+.rank-dot.top { background: var(--copper); color: #fff; }
+
+/* Chart */
+.chart-wrap {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 24px;
+}
+.chart-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--navy-dark);
+  margin-bottom: 4px;
+}
+.chart-sub {
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-bottom: 16px;
+}
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.chart-legend-item { display: flex; align-items: center; gap: 5px; }
+.chart-legend-swatch { width: 10px; height: 10px; border-radius: 2px; }
+.chart-container { position: relative; width: 100%; height: 480px; }
+
+/* Two-col */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Callout */
+.callout {
+  background: var(--amber-pale);
+  border-left: 3px solid var(--amber);
+  border-radius: 4px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+}
+.callout .callout-head {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--amber);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.callout .callout-body {
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.7;
+}
+.callout .callout-body strong { color: var(--ink); font-weight: 600; }
+
+/* Footer */
+footer.dashboard-foot {
+  margin-top: 60px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--ink-4);
+  letter-spacing: 0.05em;
+}
+
+/* Insight Strip */
+.insights {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 40px;
+}
+.insight {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  position: relative;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.insight:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.insight-icon {
+  width: 32px; height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+}
+.insight-icon.copper { background: var(--copper); }
+.insight-icon.navy { background: var(--navy); }
+.insight-icon.green { background: var(--green); }
+.insight-icon.amber { background: var(--amber); }
+.insight-content { flex: 1; min-width: 0; }
+.insight-label {
+  font-size: 10px;
+  color: var(--ink-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.insight-value {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 16px;
+  color: var(--navy-dark);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+.insight-meta {
+  font-size: 10px;
+  color: var(--ink-3);
+  margin-top: 1px;
+}
+
+/* Print button */
+.action-btn {
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  color: var(--navy);
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s;
+  margin-top: 10px;
+}
+.action-btn:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
+.action-btn svg { width: 14px; height: 14px; }
+
+/* Trend section */
+.trend-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 20px;
+}
+.donut-wrap {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 24px;
+}
+.donut-stats {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.donut-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 0;
+  font-size: 13px;
+}
+.donut-stat:not(:last-child) { border-bottom: 1px dashed var(--line); }
+.donut-stat-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-2);
+}
+.donut-stat-swatch { width: 11px; height: 11px; border-radius: 2px; }
+.donut-stat-value {
+  font-feature-settings: 'tnum' on;
+  color: var(--navy-dark);
+  font-weight: 600;
+}
+.donut-stat-pct {
+  font-size: 11px;
+  color: var(--ink-3);
+  margin-left: 6px;
+  font-weight: 400;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .layout { grid-template-columns: 1fr; }
+  aside.sidebar { position: relative; height: auto; padding: 16px 24px; }
+  .sidebar-foot { position: static; margin-top: 12px; padding-top: 8px; }
+  .nav { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 6px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav li { margin-bottom: 0; flex-shrink: 0; }
+  .nav a { padding: 8px 14px; white-space: nowrap; border-left: none; border-bottom: 2px solid transparent; }
+  .nav a.active { border-left: none; border-bottom-color: var(--copper); background: rgba(255,255,255,0.08); }
+  main { padding: 32px 24px; }
+  .insights { grid-template-columns: repeat(2, 1fr); }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .scenarios { grid-template-columns: 1fr; }
+  .two-col { grid-template-columns: 1fr; }
+  .trend-grid { grid-template-columns: 1fr; }
+  .title-block h1 { font-size: 26px; }
+  .card { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+}
+@media (max-width: 640px) {
+  main { padding: 24px 16px 60px; }
+  .title-block h1 { font-size: 22px; }
+  .title-block .subtitle { font-size: 12px; }
+  .head-meta { text-align: left; }
+  .section-head h2 { font-size: 17px; }
+  .section-head .aside-label { display: none; }
+  .insights { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .insight { padding: 10px 12px; gap: 8px; }
+  .insight-icon { width: 28px; height: 28px; font-size: 13px; }
+  .insight-value { font-size: 14px; }
+  .kpi-grid { grid-template-columns: 1fr; }
+  .cal-cell { min-height: 64px; padding: 3px 4px; }
+  .cal-num { font-size: 10px; }
+  .leave-pill { font-size: 9px; padding: 1px 3px; }
+  .leave-pill .pt { font-size: 8px; margin-left: 2px; }
+  .holiday-name { font-size: 9px; }
+  .cal-head { font-size: 9px; padding: 4px 0; }
+  .cal-wrap { padding: 16px; }
+  .card table { min-width: 540px; }
+  th, td { padding: 8px 10px; }
+  th { font-size: 10px; letter-spacing: 0.05em; }
+  td { font-size: 12px; }
+  td.detail { font-size: 11px; }
+  .rank-dot { width: 20px; height: 20px; line-height: 20px; font-size: 10px; margin-right: 4px; }
+  .chart-container { height: 440px; }
+  .chart-wrap { padding: 16px; }
+  .chart-title { font-size: 14px; }
+  .chart-sub { font-size: 11px; }
+  .donut-wrap { padding: 16px; }
+  .modal { padding: 20px 22px; }
+  .modal-head h3 { font-size: 20px; }
+  .modal-stats { grid-template-columns: 1fr; gap: 8px; }
+  .modal-stat-value { font-size: 22px; }
+  .modal-monthly-grid { grid-template-columns: repeat(5, 1fr); gap: 4px; }
+  .modal-month { padding: 8px 4px; }
+  .modal-month-label { font-size: 10px; }
+  .modal-month-value { font-size: 12px; }
+  .modal-records li { font-size: 11px; padding: 7px 10px; gap: 6px; }
+  .modal-record-date { min-width: 32px; }
+  .modal-record-type { min-width: 56px; font-size: 11px; }
+  .page-head { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
+
+/* Print */
+@media print {
+  aside.sidebar, .action-btn { display: none !important; }
+  body { background: #fff; }
+  .layout { grid-template-columns: 1fr; }
+  main { padding: 16px; max-width: 100%; }
+  section { break-inside: avoid; page-break-inside: avoid; margin-bottom: 28px; }
+  .insights { grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 24px; }
+  .insight { box-shadow: none; }
+  .cal-wrap, .card, .chart-wrap, .donut-wrap { box-shadow: none; break-inside: avoid; }
+  .chart-container { height: 360px; }
+  header.page-head { margin-bottom: 24px; padding-bottom: 16px; }
+  .modal-overlay { display: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-mark">세인바이오</div>
+    <div class="brand-sub">Leave Dashboard</div>
+  </div>
+  <ul class="nav">
+    <li><a href="#calendar" class="active">5월 달력</a></li>
+    <li><a href="#cumulative">인원별 누계</a></li>
+    <li><a href="#detail">5월 상세</a></li>
+  </ul>
+  <div class="sidebar-foot">
+    · Slack #0-08연월차현황<br>
+    · v14 · 실시간 연동
+  </div>
+</aside>
+
+<main>
+<header class="page-head">
+  <div class="title-block">
+    <div class="eyebrow">Annual &amp; Monthly Leave · 2026</div>
+    <h1>연월차 현황 대시보드</h1>
+    <div class="subtitle">2026년 4월 상세 · 1~4월 누계 · <span style="color: var(--copper); font-weight: 500;">이름 클릭 시 인원별 상세</span></div>
+  </div>
+  <div class="head-meta">
+    <div class="date">2026.05.01 금요일</div>
+    <div class="date-sub">집계 기준일 · 근로자의 날</div>
+    <div class="source-chip">Slack 기록 실시간 반영</div>
+    <button class="action-btn" onclick="refreshDashboard()" aria-label="시트 데이터 새로고침" style="margin-right: 8px;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      새로고침
+    </button>
+    <button class="action-btn" onclick="window.print()" aria-label="인쇄 또는 PDF로 저장">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      인쇄 / PDF 저장
+    </button>
+  </div>
+</header>
+
+<section id="calendar">
+  <div class="section-head">
+    <h2>5월 달력</h2>
+    <span class="aside-label">May Calendar</span>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-swatch" style="background: var(--navy);"></span>종일연차</div>
+    <div class="legend-item"><span class="legend-swatch" style="background: var(--navy-pale); border: 0.5px solid var(--navy-light);"></span>반차 (0.5일)</div>
+    <div class="legend-item"><span class="legend-swatch" style="border: 1px dashed var(--navy-light);"></span>반반차 (0.25일)</div>
+    <div class="legend-item"><span class="legend-swatch" style="background: var(--red-pale); border: 1px solid #FED7D4;"></span>공휴일</div>
+    <div class="legend-item"><span class="legend-swatch" style="background: var(--surface-2); border: 1px solid var(--line);"></span>주말</div>
+    <div class="legend-item"><span class="legend-swatch" style="border: 2px solid var(--copper); box-shadow: 0 0 0 2px var(--copper-pale); background: var(--surface);"></span>오늘</div>
+  </div>
+
+  <div class="cal-wrap">
+    <div class="cal-title">
+      <h3>2026년 5월</h3>
+      <div class="cal-stat">공휴일 <strong>3일</strong> + 근로자의 날 <strong>1일</strong></div>
+    </div>
+    <div id="cal-may" class="cal-grid"></div>
+  </div>
+</section>
+
+<section id="cumulative">
+  <div class="section-head">
+    <h2>인원별 누계</h2>
+    <span class="aside-label">2026년 1월 ~ 5월</span>
+  </div>
+
+  <div class="two-col" style="grid-template-columns: 1.25fr 0.75fr;">
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th>순위</th>
+            <th>이름</th>
+            <th class="num total">합계</th>
+            <th class="num">1월</th>
+            <th class="num">2월</th>
+            <th class="num">3월</th>
+            <th class="num">4월</th>
+            <th class="num">5월</th>
+          </tr>
+        </thead>
+        <tbody id="cumTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">월별 누적 차트</div>
+      <div class="chart-sub">많이 사용한 순 · 단위: 일</div>
+      <div class="chart-legend">
+        <div class="chart-legend-item"><span class="chart-legend-swatch" style="background: #B8D4D9;"></span>1월</div>
+        <div class="chart-legend-item"><span class="chart-legend-swatch" style="background: #6FA5AE;"></span>2월</div>
+        <div class="chart-legend-item"><span class="chart-legend-swatch" style="background: #1F6B7E;"></span>3월</div>
+        <div class="chart-legend-item"><span class="chart-legend-swatch" style="background: #0A3642;"></span>4월</div>
+        <div class="chart-legend-item"><span class="chart-legend-swatch" style="background: #B87333;"></span>5월</div>
+      </div>
+      <div class="chart-container">
+        <canvas id="cumChart" role="img" aria-label="인원별 2026년 1~5월 연차 누적 사용일수 가로막대 차트. 성유진 6.75일, 이충선 6.5일, 이복진 5.0일, 황유나 4.5일, 왕려원 4.25일, 김휘동 4.25일, 김선이 3.5일, 류미화 3.0일, 박혜련 3.0일, 박제영 3.0일, 송영근 2.5일, 이병준 2.25일, 여선구 2.0일">인원별 누계 막대 차트</canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="detail">
+  <div class="section-head">
+    <h2>5월 인원별 상세</h2>
+    <span class="aside-label">May 2026 · Detailed log</span>
+  </div>
+  <p style="font-size: 12px; color: var(--ink-3); margin-bottom: 12px;">5/1 기준 · 신청 <strong style="color: var(--navy);">3건</strong> · 모두 5/4(월) 황금연휴 사용</p>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 15%;">이름</th>
+          <th class="num" style="width: 12%;">사용일</th>
+          <th style="width: 73%;">상세 내역</th>
+        </tr>
+      </thead>
+      <tbody id="aprDetailBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<footer class="dashboard-foot">
+  <div>작성 · <strong style="color: var(--navy); font-weight: 600;">이병준 팀장</strong></div>
+  <div>leave_dashboard_v14 · 시트 자동 연동</div>
+</footer>
+
+</main>
+</div>
+
+<div id="personModal" class="modal-overlay" onclick="if(event.target.id==='personModal')closeModal()">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="modal-eyebrow">Individual Record</div>
+        <h3 id="modal-name"></h3>
+      </div>
+      <button class="modal-close" onclick="closeModal()" aria-label="닫기">✕</button>
+    </div>
+    <div class="modal-stats">
+      <div class="modal-stat">
+        <div class="modal-stat-label">4월 사용</div>
+        <div class="modal-stat-value"><span id="modal-apr">0</span><span class="unit">일</span></div>
+      </div>
+      <div class="modal-stat accent">
+        <div class="modal-stat-label">2026 누계</div>
+        <div class="modal-stat-value"><span id="modal-total">0</span><span class="unit">일</span></div>
+      </div>
+    </div>
+    <div class="modal-section">
+      <h4>월별 내역</h4>
+      <div id="modal-monthly" class="modal-monthly-grid"></div>
+    </div>
+    <div class="modal-section">
+      <h4>상세 기록</h4>
+      <ul id="modal-records" class="modal-records"></ul>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== Google Sheets API 연동 ==========
+const API_URL = 'https://script.google.com/macros/s/AKfycbzoBjOJ5dqLzOV5AEx1Pkrq2eTO_E9hC7shysd0Qnyn1yIv_DDkzp39ILOZhCSvohY02A/exec';
+const ROLE_MAP = { '이복진': '차장', '이병준': '팀장' };
+let chartInstances = {}; // 차트 인스턴스 보관 (재렌더 시 destroy용)
+
+let aprLeaves = {
+  2: [['이충선','full'],['김선이','half'],['성유진','quarter']],
+  6: [['송영근','full']],
+  9: [['이충선','quarter'],['김선이','quarter']],
+  10: [['이복진','full'],['이충선','full']],
+  13: [['박혜련','full'],['여선구','full'],['이병준','full']],
+  16: [['성유진','half']],
+  17: [['이충선','half']],
+  22: [['류미화','half']],
+  24: [['김휘동','half'],['이병준','quarter']],
+  27: [['성유진','half']],
+  28: [['황유나','full']],
+  29: [['왕려원','half'],['이병준','full'],['성유진','half']],
+  30: [['왕려원','full'],['김휘동','full'],['이복진','full']]
+};
+let mayLeaves = {
+  4: [['이충선','full'],['박제영','full'],['성유진','full']]
+};
+const mayHolidays = { 1: '근로자의 날', 5: '어린이날', 24: '부처님오신날', 25: '대체공휴일' };
+
+let cumData = [
+  ['성유진', 1.0, 2.0, 1.0, 1.75, 1.0, 6.75],
+  ['이충선', 0, 2.0, 0.75, 2.75, 1.0, 6.5],
+  ['이복진', 1.0, 1.0, 1.0, 2.0, 0, 5.0],
+  ['황유나', 1.0, 1.5, 1.0, 1.0, 0, 4.5],
+  ['왕려원', 0, 2.5, 0.25, 1.5, 0, 4.25],
+  ['김휘동', 0.5, 2.0, 0.25, 1.5, 0, 4.25],
+  ['김선이', 1.0, 1.5, 0.25, 0.75, 0, 3.5],
+  ['류미화', 0, 0, 2.5, 0.5, 0, 3.0],
+  ['박혜련', 0, 1.0, 1.0, 1.0, 0, 3.0],
+  ['박제영', 1.0, 0, 1.0, 0, 1.0, 3.0],
+  ['송영근', 0, 1.0, 0.5, 1.0, 0, 2.5],
+  ['이병준', 0, 0, 0, 2.25, 0, 2.25],
+  ['여선구', 0, 1.0, 0, 1.0, 0, 2.0]
+];
+
+let mayDetails = [
+  ['이충선', 1.0, '5/4 종일'],
+  ['박제영', 1.0, '5/4 종일'],
+  ['성유진', 1.0, '5/4 종일']
+];
+
+const typeLabels = { full: '연차', half: '반차', quarter: '반반차' };
+
+function buildCalendar(id, year, month, leaves, holidays, firstDow, totalDays, today) {
+  const t = document.getElementById(id);
+  const labels = ['일','월','화','수','목','금','토'];
+  labels.forEach((l, i) => {
+    const h = document.createElement('div');
+    h.className = 'cal-head' + (i === 0 ? ' sun' : i === 6 ? ' sat' : '');
+    h.textContent = l;
+    t.appendChild(h);
+  });
+  for (let i = 0; i < firstDow; i++) {
+    const e = document.createElement('div');
+    e.className = 'cal-cell empty';
+    t.appendChild(e);
+  }
+  for (let d = 1; d <= totalDays; d++) {
+    const dow = (firstDow + d - 1) % 7;
+    const isWeekend = dow === 0 || dow === 6;
+    const h = holidays[d];
+    const dls = leaves[d] || [];
+    const isToday = (d === today);
+    const cell = document.createElement('div');
+    let cls = 'cal-cell';
+    if (h) cls += ' holiday';
+    else if (isWeekend) cls += ' weekend';
+    if (isToday) cls += ' today';
+    cell.className = cls;
+    const numCls = dow === 0 ? ' sun' : dow === 6 ? ' sat' : '';
+    const todayBadge = isToday ? '<span class="cal-today-badge">TODAY</span>' : '';
+    cell.innerHTML = '<div class="cal-num' + numCls + '"><span>' + d + '</span>' + todayBadge + '</div>';
+    if (h) {
+      const hl = document.createElement('div');
+      hl.className = 'holiday-name';
+      hl.textContent = h;
+      cell.appendChild(hl);
+    }
+    dls.forEach(([name, type]) => {
+      const p = document.createElement('div');
+      p.className = 'leave-pill ' + type;
+      p.innerHTML = '<span class="pn">' + name + '</span><span class="pt">' + typeLabels[type] + '</span>';
+      p.title = name + ' · ' + typeLabels[type] + ' (클릭하여 상세보기)';
+      p.addEventListener('click', () => openPersonModal(name));
+      cell.appendChild(p);
+    });
+    t.appendChild(cell);
+  }
+}
+
+function renderCalendars() {
+  document.getElementById('cal-may').innerHTML = '';
+  buildCalendar('cal-may', 2026, 5, mayLeaves, mayHolidays, 5, 31, 1);
+  // 5월 달력 통계 텍스트 갱신
+  const mayCount = countLeavesInMonth(mayLeaves);
+  const mayStatEl = document.querySelector('#calendar .cal-wrap .cal-stat');
+  if (mayStatEl) mayStatEl.innerHTML = `5월 신청 <strong>${mayCount.days}일</strong> · <strong>${mayCount.entries}건</strong> · <strong>${mayCount.people}명</strong>`;
+}
+
+function countLeavesInMonth(leaves) {
+  const people = new Set();
+  let entries = 0, days = 0;
+  Object.values(leaves).forEach(arr => {
+    arr.forEach(([name, type]) => {
+      people.add(name);
+      entries++;
+      if (type === 'full') days += 1;
+      else if (type === 'half') days += 0.5;
+      else if (type === 'quarter') days += 0.25;
+    });
+  });
+  return { people: people.size, entries, days: Math.round(days * 100) / 100 };
+}
+
+function renderCumTable() {
+  const tBody = document.getElementById('cumTableBody');
+  tBody.innerHTML = '';
+  function fmt(v) { return v === 0 ? '—' : v; }
+  cumData.forEach((r, i) => {
+    const tr = document.createElement('tr');
+    const rankCls = i < 3 ? 'rank-dot top' : 'rank-dot';
+    tr.innerHTML = '<td><span class="' + rankCls + '">' + (i+1) + '</span></td>' +
+      '<td class="name"><span class="clickable-name" onclick="openPersonModal(\'' + r[0] + '\')">' + r[0] + '</span></td>' +
+      '<td class="num total">' + r[6] + '</td>' +
+      '<td class="num">' + fmt(r[1]) + '</td>' +
+      '<td class="num">' + fmt(r[2]) + '</td>' +
+      '<td class="num">' + fmt(r[3]) + '</td>' +
+      '<td class="num">' + fmt(r[4]) + '</td>' +
+      '<td class="num">' + fmt(r[5]) + '</td>';
+    tBody.appendChild(tr);
+  });
+  const totalTr = document.createElement('tr');
+  totalTr.className = 'total-row';
+  const jan = cumData.reduce((s, r) => s + r[1], 0);
+  const feb = cumData.reduce((s, r) => s + r[2], 0);
+  const mar = cumData.reduce((s, r) => s + r[3], 0);
+  const apr = cumData.reduce((s, r) => s + r[4], 0);
+  const may = cumData.reduce((s, r) => s + r[5], 0);
+  const tot = cumData.reduce((s, r) => s + r[6], 0);
+  totalTr.innerHTML = '<td></td><td>전체 합계</td>' +
+    '<td class="num total">' + tot.toFixed(1) + '</td>' +
+    '<td class="num">' + jan.toFixed(1) + '</td>' +
+    '<td class="num">' + feb.toFixed(1) + '</td>' +
+    '<td class="num">' + mar.toFixed(1) + '</td>' +
+    '<td class="num">' + apr.toFixed(1) + '</td>' +
+    '<td class="num">' + may.toFixed(1) + '</td>';
+  tBody.appendChild(totalTr);
+}
+
+function renderDetailTable() {
+  const dBody = document.getElementById('aprDetailBody');
+  dBody.innerHTML = '';
+  mayDetails.forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td class="name"><span class="clickable-name" onclick="openPersonModal(\'' + r[0] + '\')">' + r[0] + '</span></td>' +
+      '<td class="num"><strong>' + r[1] + '</strong>일</td>' +
+      '<td class="detail">' + r[2] + '</td>';
+    dBody.appendChild(tr);
+  });
+  // 상세 안내 텍스트도 갱신
+  const totalDays = mayDetails.reduce((s, r) => s + r[1], 0);
+  const noteEl = document.querySelector('#detail > p');
+  if (noteEl) {
+    const todayStr = new Date().toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' });
+    noteEl.innerHTML = `${todayStr} 기준 · 신청 <strong style="color: var(--navy);">${mayDetails.length}건</strong> · 총 <strong>${totalDays.toFixed(2)}일</strong>`;
+  }
+}
+
+function renderCharts() {
+  // 기존 차트 제거
+  if (chartInstances.cum) chartInstances.cum.destroy();
+
+const names = cumData.map(r => r[0]);
+const jan2 = cumData.map(r => r[1]);
+const feb2 = cumData.map(r => r[2]);
+const mar2 = cumData.map(r => r[3]);
+const apr2 = cumData.map(r => r[4]);
+const may2 = cumData.map(r => r[5]);
+
+chartInstances.cum = new Chart(document.getElementById('cumChart'), {
+  type: 'bar',
+  data: {
+    labels: names,
+    datasets: [
+      { label: '1월', data: jan2, backgroundColor: '#B8D4D9', borderWidth: 0 },
+      { label: '2월', data: feb2, backgroundColor: '#6FA5AE', borderWidth: 0 },
+      { label: '3월', data: mar2, backgroundColor: '#1F6B7E', borderWidth: 0 },
+      { label: '4월', data: apr2, backgroundColor: '#0A3642', borderWidth: 0 },
+      { label: '5월', data: may2, backgroundColor: '#B87333', borderWidth: 0 }
+    ]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    layout: { padding: { right: 20 } },
+    scales: {
+      x: { stacked: true, beginAtZero: true, ticks: { stepSize: 1, callback: v => v + '일', font: { family: 'Pretendard', size: 11 }, color: '#9AA3B2' }, grid: { color: '#E5E7E2', drawBorder: false } },
+      y: { stacked: true, grid: { display: false }, ticks: { font: { family: 'Pretendard', size: 12, weight: 500 }, color: '#1A2332' } }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#0A3642',
+        titleFont: { family: 'Pretendard', size: 13, weight: 600 },
+        bodyFont: { family: 'Pretendard', size: 12 },
+        padding: 12,
+        callbacks: {
+          label: ctx => ctx.dataset.label + ': ' + ctx.parsed.x + '일',
+          footer: items => '합계: ' + Math.round(items.reduce((s, i) => s + i.parsed.x, 0) * 100) / 100 + '일'
+        }
+      }
+    },
+    onClick: (e, elements, chart) => {
+      const points = chart.getElementsAtEventForMode(e, 'y', { intersect: false }, false);
+      if (points.length) {
+        const name = chart.data.labels[points[0].index];
+        openPersonModal(name);
+      } else {
+        const canvasPosition = Chart.helpers.getRelativePosition(e, chart);
+        const yScale = chart.scales.y;
+        const idx = Math.floor((canvasPosition.y - yScale.top) / (yScale.height / names.length));
+        if (idx >= 0 && idx < names.length) openPersonModal(names[idx]);
+      }
+    },
+    onHover: (e, elements, chart) => {
+      e.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+    }
+  }
+});
+
+document.querySelectorAll('.nav a').forEach(a => {
+  a.addEventListener('click', e => {
+    document.querySelectorAll('.nav a').forEach(x => x.classList.remove('active'));
+    a.classList.add('active');
+  });
+});
+
+} // end of renderCharts()
+
+function renderAll() {
+  renderCalendars();
+  renderCumTable();
+  renderDetailTable();
+  renderCharts();
+}
+
+// 초기 렌더링 (폴백 데이터)
+renderAll();
+
+// ========== 실시간 데이터 로드 ==========
+
+function cleanNameStr(raw) {
+  if (!raw) return '';
+  let n = String(raw).trim();
+  const mentionMatch = n.match(/<@[A-Z0-9]+\|([^>]+)>/);
+  if (mentionMatch) return mentionMatch[1].trim();
+  if (n.startsWith('@')) n = n.slice(1);
+  n = n.replace(/\s*(차장|팀장|과장|책임|대리|사원|부장|이사|상무)$/, '');
+  return n.trim();
+}
+
+function calcDaysFromType(type) {
+  if (!type) return 0;
+  const t = String(type);
+  if (t.indexOf('종일') !== -1) return 1.0;
+  if (t.indexOf('반반차') !== -1) return 0.25;
+  if (t.indexOf('반차') !== -1) return 0.5;
+  return 0;
+}
+
+function typeKey(type) {
+  if (!type) return 'full';
+  if (type.indexOf('반반차') !== -1) return 'quarter';
+  if (type.indexOf('반차') !== -1) return 'half';
+  return 'full';
+}
+
+function parseApiDate(dateStr) {
+  if (!dateStr) return null;
+  const s = String(dateStr);
+  let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (m) return { year: +m[1], month: +m[2], day: +m[3] };
+  m = s.match(/^(\d{1,2})[\/\-](\d{1,2})/);
+  if (m) return { year: 2026, month: +m[1], day: +m[2] };
+  return null;
+}
+
+function transformApiData(apiData) {
+  const raw = (apiData.records || []).filter(r => r.name && r.type);
+  
+  // 인원별 모든 record 모으기 (월 정보 포함)
+  const byPerson = {};
+  const aprLeavesNew = {};
+  const mayLeavesNew = {};
+
+  raw.forEach(r => {
+    const name = cleanNameStr(r.name);
+    if (!name) return;
+    const parsed = parseApiDate(r.date);
+    if (!parsed) return;
+    const days = calcDaysFromType(r.type);
+    const tKey = typeKey(r.type);
+
+    if (!byPerson[name]) byPerson[name] = [];
+    byPerson[name].push({
+      month: parsed.month, day: parsed.day,
+      shortDate: parsed.month + '/' + parsed.day,
+      type: r.type, note: r.note || '', days, tKey
+    });
+
+    // 4월/5월이면 캘린더 데이터에도 추가
+    if (parsed.month === 4) {
+      if (!aprLeavesNew[parsed.day]) aprLeavesNew[parsed.day] = [];
+      aprLeavesNew[parsed.day].push([name, tKey]);
+    } else if (parsed.month === 5) {
+      if (!mayLeavesNew[parsed.day]) mayLeavesNew[parsed.day] = [];
+      mayLeavesNew[parsed.day].push([name, tKey]);
+    }
+  });
+
+  // 인원별 월별 누계 + cumData 재구성
+  const newCumData = [];
+  Object.entries(byPerson).forEach(([name, recs]) => {
+    const monthly = [0, 0, 0, 0, 0];
+    recs.forEach(r => {
+      if (r.month >= 1 && r.month <= 5) monthly[r.month - 1] += r.days;
+    });
+    monthly.forEach((v, i) => monthly[i] = Math.round(v * 100) / 100);
+    const total = Math.round(monthly.reduce((a, b) => a + b, 0) * 100) / 100;
+    newCumData.push([name, ...monthly, total]);
+  });
+  newCumData.sort((a, b) => b[6] - a[6]);
+
+  // mayDetails 재구성
+  const mayByPerson = {};
+  Object.entries(byPerson).forEach(([name, recs]) => {
+    const mayRecs = recs.filter(r => r.month === 5);
+    if (mayRecs.length === 0) return;
+    const sum = Math.round(mayRecs.reduce((s, r) => s + r.days, 0) * 100) / 100;
+    const detail = mayRecs.map(r => {
+      const tShort = r.tKey === 'full' ? '종일' : (r.tKey === 'half' ? '반차' : '반반차');
+      return `${r.shortDate} ${tShort}${r.note ? '(' + r.note + ')' : ''}`;
+    }).join(' · ');
+    mayByPerson[name] = { sum, detail };
+  });
+  const newMayDetails = Object.entries(mayByPerson)
+    .map(([n, d]) => [n, d.sum, d.detail])
+    .sort((a, b) => b[1] - a[1]);
+
+  // personDetails 재구성 (모달용)
+  const newPersonDetails = {};
+  newCumData.forEach((row, i) => {
+    const name = row[0];
+    const recs = (byPerson[name] || []).sort((a, b) => (a.month - b.month) || (a.day - b.day));
+    const monthLabelType = (tKey) => tKey === 'full' ? '연차' : (tKey === 'half' ? '반차(오후)' : '반반차(오후)');
+    newPersonDetails[name] = {
+      apr: row[4],
+      total: row[6],
+      monthly: [row[1], row[2], row[3], row[4], row[5]],
+      records: recs.map(r => [r.shortDate, monthLabelType(r.tKey), r.note])
+    };
+  });
+
+  // typeBreakdown
+  let countFull = 0, countHalf = 0, countQuarter = 0;
+  Object.values(byPerson).forEach(recs => {
+    recs.forEach(r => {
+      if (r.tKey === 'full') countFull++;
+      else if (r.tKey === 'half') countHalf++;
+      else countQuarter++;
+    });
+  });
+
+  return {
+    aprLeaves: aprLeavesNew,
+    mayLeaves: mayLeavesNew,
+    cumData: newCumData,
+    mayDetails: newMayDetails,
+    personDetails: newPersonDetails,
+    typeCounts: { full: countFull, half: countHalf, quarter: countQuarter },
+    updated: apiData.updated || new Date().toISOString()
+  };
+}
+
+function formatUpdated(iso) {
+  try {
+    const d = new Date(iso);
+    return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  } catch { return iso; }
+}
+
+function updateStatusBadge(text, isError) {
+  const chip = document.querySelector('.source-chip');
+  if (!chip) return;
+  chip.textContent = text;
+  chip.style.background = isError ? '#FEF3F2' : 'var(--navy-pale)';
+  chip.style.color = isError ? 'var(--red)' : 'var(--ink-3)';
+}
+
+async function loadLiveData() {
+  updateStatusBadge('데이터 불러오는 중…');
+  try {
+    const res = await fetch(API_URL, { method: 'GET', redirect: 'follow' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const apiData = await res.json();
+    if (apiData.error) throw new Error(apiData.error);
+    if (!apiData.records || apiData.records.length === 0) throw new Error('데이터 없음');
+
+    const result = transformApiData(apiData);
+    aprLeaves = result.aprLeaves;
+    mayLeaves = result.mayLeaves;
+    cumData = result.cumData;
+    mayDetails = result.mayDetails;
+    personDetails = result.personDetails;
+
+    renderAll();
+
+    updateStatusBadge('시트 연동 · ' + formatUpdated(result.updated));
+    console.log('실시간 데이터 로드 완료:', result);
+  } catch (err) {
+    console.error('데이터 로드 실패:', err);
+    updateStatusBadge('연결 실패 · 폴백 데이터', true);
+  }
+}
+
+// 페이지 로드 시 자동 fetch
+window.addEventListener('load', loadLiveData);
+
+// 새로고침 함수 (인쇄 버튼 옆에 추가 예정)
+function refreshDashboard() {
+  loadLiveData();
+}
+
+let personDetails = {
+  '성유진': { apr: 1.75, total: 6.75, monthly: [1.0, 2.0, 1.0, 1.75, 1.0], records: [
+    ['1/19','연차',''],['2/19','연차',''],['2/20','연차',''],['3/27','연차',''],
+    ['4/2','반반차(오전)','2시간'],['4/16','반차(오후)',''],['4/27','반차(오후)',''],
+    ['4/29','반차(오후)',''],['5/4','연차','']
+  ]},
+  '이충선': { apr: 2.75, total: 6.5, monthly: [0, 2.0, 0.75, 2.75, 1.0], records: [
+    ['2/13','연차',''],['2/26','연차','병원(어머니)'],
+    ['3/13','반차(오후)','병원(어머니)'],['3/25','반반차(오후)','안과'],
+    ['4/2','연차','병원(어머니)'],['4/9','반반차(오후)','15:30~'],
+    ['4/10','연차',''],['4/17','반차(오후)','병원(어머니)'],
+    ['5/4','연차','']
+  ]},
+  '이복진': { apr: 2.0, total: 5.0, monthly: [1.0, 1.0, 1.0, 2.0, 0], records: [
+    ['1/30','연차','병원진료'],['2/27','연차','병원'],
+    ['3/20','연차','병원진료'],['4/10','연차','병원'],['4/30','연차','병원']
+  ]},
+  '황유나': { apr: 1.0, total: 4.5, monthly: [1.0, 1.5, 1.0, 1.0, 0], records: [
+    ['1/20','연차',''],['2/13','연차',''],['2/19','반차(오전)',''],
+    ['3/27','연차',''],['4/28','연차','']
+  ]},
+  '왕려원': { apr: 1.5, total: 4.25, monthly: [0, 2.5, 0.25, 1.5, 0], records: [
+    ['2/13','반차(오전)',''],['2/19','연차',''],['2/20','연차',''],
+    ['3/24','반반차(오후)','한의원'],
+    ['4/29','반차(오후)',''],['4/30','연차','']
+  ]},
+  '김휘동': { apr: 1.5, total: 4.25, monthly: [0.5, 2.0, 0.25, 1.5, 0], records: [
+    ['1/23','반차(오후)',''],['2/19','연차',''],['2/20','연차',''],
+    ['3/20','반반차(오후)','15시 조퇴(병가)'],
+    ['4/24','반차(오후)',''],['4/30','연차','']
+  ]},
+  '김선이': { apr: 0.75, total: 3.5, monthly: [1.0, 1.5, 0.25, 0.75, 0], records: [
+    ['1/2','연차',''],['2/4','반차(오전)',''],['2/24','연차','병원진료'],
+    ['3/27','반반차(오후)','1시간'],
+    ['4/2','반차(오후)','병원진료(어머니)'],['4/9','반반차(오후)','개인사정']
+  ]},
+  '류미화': { apr: 0.5, total: 3.0, monthly: [0, 0, 2.5, 0.5, 0], records: [
+    ['3/11','반차(오후)',''],['3/12','연차',''],['3/13','연차',''],['4/22','반차(오후)','']
+  ]},
+  '박혜련': { apr: 1.0, total: 3.0, monthly: [0, 1.0, 1.0, 1.0, 0], records: [
+    ['2/19','연차',''],['3/5','연차',''],['4/13','연차','']
+  ]},
+  '박제영': { apr: 0, total: 3.0, monthly: [1.0, 0, 1.0, 0, 1.0], records: [
+    ['1/26','연차',''],['3/30','연차',''],['5/4','연차','']
+  ]},
+  '송영근': { apr: 1.0, total: 2.5, monthly: [0, 1.0, 0.5, 1.0, 0], records: [
+    ['2/6','연차',''],['3/6','반차(오후)',''],['4/6','연차','']
+  ]},
+  '이병준': { apr: 2.25, total: 2.25, monthly: [0, 0, 0, 2.25, 0], records: [
+    ['4/13','연차','병원 진료'],['4/24','반반차(오후)',''],['4/29','연차','아내 병원']
+  ]},
+  '여선구': { apr: 1.0, total: 2.0, monthly: [0, 1.0, 0, 1.0, 0], records: [
+    ['2/9','연차',''],['4/13','연차','']
+  ]}
+};
+
+function recordTypeClass(type) {
+  if (type.startsWith('반반차')) return 'quarter';
+  if (type.startsWith('반차')) return 'half';
+  return 'full';
+}
+
+function openPersonModal(name) {
+  const d = personDetails[name];
+  if (!d) return;
+  document.getElementById('modal-name').textContent = name;
+  document.getElementById('modal-apr').textContent = d.apr === 0 ? '—' : d.apr;
+  document.getElementById('modal-total').textContent = d.total;
+
+  const monthLabels = ['1월','2월','3월','4월','5월'];
+  const mhtml = d.monthly.map((v, i) => {
+    const cls = v === 0 ? 'modal-month empty' : 'modal-month';
+    const val = v === 0 ? '—' : v + '일';
+    return '<div class="' + cls + '"><div class="modal-month-label">' + monthLabels[i] + '</div><div class="modal-month-value">' + val + '</div></div>';
+  }).join('');
+  document.getElementById('modal-monthly').innerHTML = mhtml;
+
+  const rhtml = d.records.map(r => {
+    const cls = recordTypeClass(r[1]);
+    const note = r[2] ? '<span class="modal-record-note">· ' + r[2] + '</span>' : '';
+    return '<li class="' + cls + '"><span class="modal-record-date">' + r[0] + '</span><span class="modal-record-type">' + r[1] + '</span>' + note + '</li>';
+  }).join('');
+  document.getElementById('modal-records').innerHTML = rhtml;
+
+  document.getElementById('personModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('personModal').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+</body>
+</html>
