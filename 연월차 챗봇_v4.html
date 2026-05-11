@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>세인바이오 연월차 비서 · 챗봇</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/marked@11/marked.min.js"></script>
+<style>
+:root {
+  --navy: #0F4C5C;
+  --navy-dark: #0A3642;
+  --navy-light: #1F6B7E;
+  --navy-pale: #E8EFF1;
+  --navy-ghost: #F4F8F9;
+  --copper: #B87333;
+  --copper-light: #D89357;
+  --copper-pale: #FAF1E6;
+  --ink: #1A2332;
+  --ink-2: #3F4A5C;
+  --ink-3: #6B7585;
+  --ink-4: #9AA3B2;
+  --bg: #FAFAF7;
+  --surface: #FFFFFF;
+  --surface-2: #F5F6F3;
+  --line: #E5E7E2;
+  --line-strong: #CCD0C8;
+  --shadow-sm: 0 1px 2px rgba(15, 76, 92, 0.04);
+  --shadow-md: 0 2px 8px rgba(15, 76, 92, 0.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'tnum' on;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.serif { font-family: 'Noto Serif KR', serif; }
+
+/* Header */
+header.top-bar {
+  background: var(--navy);
+  color: #fff;
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--navy-dark);
+}
+.brand-area {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--copper) 0%, var(--copper-light) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Noto Serif KR', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  flex-shrink: 0;
+}
+.brand-text .brand-name {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+}
+.brand-text .brand-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 0.05em;
+}
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.02em;
+}
+.status-pill::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #5DCAA5;
+  box-shadow: 0 0 0 3px rgba(93,202,165,0.2);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(93,202,165,0.2); }
+  50% { box-shadow: 0 0 0 5px rgba(93,202,165,0.1); }
+}
+.reset-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.85);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.reset-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.4); }
+
+/* Layout */
+.app-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  overflow: hidden;
+}
+
+/* Sidebar */
+aside.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  overflow-y: auto;
+  padding: 24px 20px;
+}
+.side-title {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 600;
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+.side-title:not(:first-child) { margin-top: 24px; }
+.chip-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.chip {
+  background: var(--surface-2);
+  border: 1px solid transparent;
+  color: var(--ink);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.chip::before {
+  content: '';
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--navy-light);
+  flex-shrink: 0;
+}
+.chip:hover {
+  background: var(--navy-pale);
+  border-color: var(--navy-light);
+  transform: translateX(2px);
+}
+.chip:active { transform: translateX(2px) scale(0.98); }
+
+.data-box {
+  margin-top: 28px;
+  padding: 14px 16px;
+  background: var(--navy-ghost);
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+.data-box-title {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--navy);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.data-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  padding: 3px 0;
+  color: var(--ink-2);
+}
+.data-row strong {
+  color: var(--navy-dark);
+  font-weight: 600;
+}
+
+/* Chat main */
+main.chat-main {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+}
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 40px 20px;
+}
+.messages-inner {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+/* Messages */
+.msg {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 24px;
+  animation: msgIn 0.25s ease;
+}
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.msg.user { flex-direction: row-reverse; }
+.msg-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Noto Serif KR', serif;
+}
+.msg-avatar.bot { background: var(--navy); color: #fff; }
+.msg-avatar.user { background: var(--copper); color: #fff; }
+.msg-bubble {
+  max-width: 75%;
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.7;
+  position: relative;
+}
+.msg.bot .msg-bubble {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top-left-radius: 4px;
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+}
+.msg.user .msg-bubble {
+  background: var(--navy);
+  color: #fff;
+  border-top-right-radius: 4px;
+}
+.msg-time {
+  font-size: 10px;
+  color: var(--ink-4);
+  margin-top: 6px;
+  padding: 0 4px;
+}
+.msg.user .msg-time { text-align: right; }
+
+/* Markdown styles inside bubbles */
+.msg-bubble h1, .msg-bubble h2, .msg-bubble h3 {
+  font-family: 'Noto Serif KR', serif;
+  margin: 12px 0 8px;
+  font-size: 15px;
+  color: var(--navy-dark);
+}
+.msg-bubble h1:first-child, .msg-bubble h2:first-child, .msg-bubble h3:first-child { margin-top: 0; }
+.msg-bubble p { margin-bottom: 8px; }
+.msg-bubble p:last-child { margin-bottom: 0; }
+.msg-bubble ul, .msg-bubble ol {
+  margin: 8px 0 8px 20px;
+  padding-left: 0;
+}
+.msg-bubble li { margin-bottom: 3px; }
+.msg-bubble strong { color: var(--navy-dark); font-weight: 600; }
+.msg.user .msg-bubble strong { color: #fff; font-weight: 600; }
+.msg-bubble code {
+  background: var(--surface-2);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--copper);
+}
+.msg-bubble table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 12px;
+}
+.msg-bubble th, .msg-bubble td {
+  padding: 7px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+.msg-bubble th {
+  background: var(--navy-ghost);
+  color: var(--navy-dark);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+.msg-bubble blockquote {
+  border-left: 3px solid var(--copper);
+  padding: 4px 12px;
+  margin: 8px 0;
+  color: var(--ink-2);
+  background: var(--copper-pale);
+  border-radius: 0 6px 6px 0;
+  font-size: 13px;
+}
+
+/* Loading indicator */
+.typing {
+  display: inline-flex;
+  gap: 4px;
+  padding: 6px 0;
+}
+.typing-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ink-3);
+  animation: typing 1.4s infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typing {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  30% { transform: translateY(-5px); opacity: 1; }
+}
+
+/* Suggested follow-ups */
+.followups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.followup-chip {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--navy);
+  padding: 5px 11px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.followup-chip:hover {
+  background: var(--navy-pale);
+  border-color: var(--navy-light);
+}
+
+/* Input bar */
+.input-bar {
+  flex-shrink: 0;
+  padding: 16px 40px 24px;
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+}
+.input-wrap {
+  max-width: 820px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+.input-field {
+  flex: 1;
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--ink);
+  resize: none;
+  min-height: 48px;
+  max-height: 140px;
+  line-height: 1.5;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.input-field:focus {
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(15, 76, 92, 0.08);
+}
+.input-field::placeholder { color: var(--ink-4); }
+.send-btn {
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  padding: 0 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s;
+}
+.send-btn:hover:not(:disabled) { background: var(--navy-dark); }
+.send-btn:disabled {
+  background: var(--line-strong);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.send-btn svg { width: 16px; height: 16px; }
+.input-hint {
+  max-width: 820px;
+  margin: 8px auto 0;
+  font-size: 11px;
+  color: var(--ink-4);
+  text-align: center;
+}
+
+/* Empty state */
+.welcome-card {
+  background: linear-gradient(135deg, var(--navy-ghost) 0%, var(--copper-pale) 100%);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 28px 32px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+.welcome-greeting {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 20px;
+  color: var(--navy-dark);
+  font-weight: 600;
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+.welcome-desc {
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.7;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .app-body { grid-template-columns: 1fr; }
+  aside.sidebar {
+    position: fixed;
+    top: 65px; left: 0; right: 0;
+    height: auto;
+    max-height: 50vh;
+    z-index: 100;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-100%);
+    transition: transform 0.25s ease;
+    padding: 16px 20px;
+  }
+  aside.sidebar.open { transform: translateY(0); }
+  .menu-toggle { display: inline-flex !important; }
+  .messages { padding: 24px 20px 16px; }
+  .input-bar { padding: 12px 20px 18px; }
+}
+.menu-toggle {
+  display: none;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  align-items: center;
+  gap: 5px;
+}
+.menu-toggle:hover { background: rgba(255,255,255,0.15); }
+
+@media (max-width: 640px) {
+  header.top-bar { padding: 12px 18px; }
+  .brand-text .brand-name { font-size: 14px; }
+  .brand-text .brand-sub { font-size: 10px; }
+  .status-pill { display: none; }
+  .messages { padding: 20px 14px 12px; }
+  .msg-bubble { max-width: 85%; padding: 12px 14px; font-size: 13px; }
+  .msg-avatar { width: 32px; height: 32px; font-size: 13px; }
+  .welcome-card { padding: 22px 20px; }
+  .welcome-greeting { font-size: 18px; }
+  .input-bar { padding: 10px 14px 14px; }
+  .input-field { font-size: 14px; padding: 10px 14px; }
+  .send-btn { padding: 0 14px; height: 44px; }
+  .input-field { min-height: 44px; }
+}
+
+/* Scrollbar */
+.messages::-webkit-scrollbar, aside.sidebar::-webkit-scrollbar { width: 6px; }
+.messages::-webkit-scrollbar-thumb, aside.sidebar::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 3px;
+}
+.messages::-webkit-scrollbar-track, aside.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="brand-area">
+    <button class="menu-toggle" onclick="toggleSidebar()" aria-label="메뉴 열기">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      추천
+    </button>
+    <div class="brand-icon">세</div>
+    <div class="brand-text">
+      <div class="brand-name">세인바이오 연월차 비서</div>
+      <div class="brand-sub">LEAVE ASSISTANT</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <span class="status-pill" id="statusPill">데이터 로드 중…</span>
+    <button class="reset-btn" onclick="refreshData()" title="시트에서 최신 데이터 다시 불러오기">⟳ 새로고침</button>
+    <button class="reset-btn" onclick="resetChat()">대화 초기화</button>
+  </div>
+</header>
+
+<div class="app-body">
+  <aside class="sidebar" id="sidebar">
+    <div class="side-title">추천 질문</div>
+    <div class="chip-list">
+      <button class="chip" onclick="askChip('이번 달에 누가 휴가 신청했어?')">이번 달 휴가자</button>
+      <button class="chip" onclick="askChip('연차 누계 Top 3 알려줘')">누계 Top 3</button>
+      <button class="chip" onclick="askChip('5/4에 누가 신청했어?')">5/4 황금연휴 신청자</button>
+      <button class="chip" onclick="askChip('이충선 과장은 연차 어떻게 썼어?')">이충선 사용 내역</button>
+      <button class="chip" onclick="askChip('성유진 책임은?')">성유진 사용 내역</button>
+      <button class="chip" onclick="askChip('이복진 차장은?')">이복진 사용 내역</button>
+    </div>
+
+    <div class="side-title">분석</div>
+    <div class="chip-list">
+      <button class="chip" onclick="askChip('연차 유형별 분포는?')">유형별 분포</button>
+      <button class="chip" onclick="askChip('월별 사용 추이는?')">월별 추이</button>
+      <button class="chip" onclick="askChip('병원 사유로 사용한 사람들?')">병원 사유 사용자</button>
+      <button class="chip" onclick="askChip('5월에 인력 공백 가능성은?')">5월 인력 공백</button>
+    </div>
+
+    <div class="side-title">공휴일·연휴</div>
+    <div class="chip-list">
+      <button class="chip" onclick="askChip('5월 공휴일 알려줘')">5월 공휴일</button>
+      <button class="chip" onclick="askChip('5월 황금연휴 어떻게 가져갈 수 있어?')">황금연휴 전략</button>
+      <button class="chip" onclick="askChip('부처님오신날 연휴 안내해줘')">부처님오신날 연휴</button>
+    </div>
+
+    <div class="data-box">
+      <div class="data-box-title">실시간 누계 현황</div>
+      <div class="data-row"><span>전체 사용</span><strong id="dataTotal">—</strong></div>
+      <div class="data-row"><span>인당 평균</span><strong id="dataAvg">—</strong></div>
+      <div class="data-row"><span>신청 건수</span><strong id="dataCount">—</strong></div>
+      <div class="data-row"><span>1위</span><strong id="dataTop">—</strong></div>
+    </div>
+  </aside>
+
+  <main class="chat-main">
+    <div class="messages" id="messages">
+      <div class="messages-inner" id="messagesInner">
+        <div class="welcome-card">
+          <div class="welcome-greeting">안녕하세요, 이병준 팀장님</div>
+          <div class="welcome-desc">세인바이오 연월차 비서입니다. 인원별 사용 현황, 월별 통계, 5월 공휴일 연동까지 무엇이든 물어보세요.<br>왼쪽 추천 질문을 누르거나 아래 입력창에 직접 질문해 보세요.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-bar">
+      <form class="input-wrap" id="inputForm" onsubmit="return handleSubmit(event)">
+        <textarea class="input-field" id="userInput" placeholder="예: 성유진은 연차 얼마나 썼어?" rows="1" required></textarea>
+        <button class="send-btn" type="submit" id="sendBtn">
+          <span>전송</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </form>
+      <div class="input-hint">Enter로 전송 · Shift+Enter로 줄바꿈 · 슬랙 데이터 기반 답변</div>
+    </div>
+  </main>
+</div>
+
+<script>
+// ========== Google Sheets API 연동 ==========
+const API_URL = 'https://script.google.com/macros/s/AKfycbzoBjOJ5dqLzOV5AEx1Pkrq2eTO_E9hC7shysd0Qnyn1yIv_DDkzp39ILOZhCSvohY02A/exec';
+
+// 폴백 데이터 (API 실패 시 사용 · 5/1 스냅샷)
+let LEAVE_DATA = {
+  today: '2026-05-01 (금) 근로자의 날',
+  cumulative: [
+    { rank: 1, name: '성유진', role: '책임', monthly: [1.0, 2.0, 1.0, 1.75, 1.0], total: 6.75 },
+    { rank: 2, name: '이충선', role: '과장', monthly: [0, 2.0, 0.75, 2.75, 1.0], total: 6.5 },
+    { rank: 3, name: '이복진', role: '차장', monthly: [1.0, 1.0, 1.0, 2.0, 0], total: 5.0 },
+    { rank: 4, name: '황유나', role: '', monthly: [1.0, 1.5, 1.0, 1.0, 0], total: 4.5 },
+    { rank: 5, name: '왕려원', role: '', monthly: [0, 2.5, 0.25, 1.5, 0], total: 4.25 },
+    { rank: 6, name: '김휘동', role: '', monthly: [0.5, 2.0, 0.25, 1.5, 0], total: 4.25 },
+    { rank: 7, name: '김선이', role: '', monthly: [1.0, 1.5, 0.25, 0.75, 0], total: 3.5 },
+    { rank: 8, name: '류미화', role: '', monthly: [0, 0, 2.5, 0.5, 0], total: 3.0 },
+    { rank: 9, name: '박혜련', role: '', monthly: [0, 1.0, 1.0, 1.0, 0], total: 3.0 },
+    { rank: 10, name: '박제영', role: '', monthly: [1.0, 0, 1.0, 0, 1.0], total: 3.0 },
+    { rank: 11, name: '송영근', role: '', monthly: [0, 1.0, 0.5, 1.0, 0], total: 2.5 },
+    { rank: 12, name: '이병준', role: '팀장', monthly: [0, 0, 0, 2.25, 0], total: 2.25 },
+    { rank: 13, name: '여선구', role: '', monthly: [0, 1.0, 0, 1.0, 0], total: 2.0 }
+  ],
+  records: {
+    '성유진': [
+      { date: '1/19', type: '연차', note: '' },
+      { date: '2/19', type: '연차', note: '' }, { date: '2/20', type: '연차', note: '' },
+      { date: '3/27', type: '연차', note: '' },
+      { date: '4/2', type: '반반차(오전)', note: '2시간' },
+      { date: '4/16', type: '반차(오후)', note: '' },
+      { date: '4/27', type: '반차(오후)', note: '' },
+      { date: '4/29', type: '반차(오후)', note: '' },
+      { date: '5/4', type: '연차', note: '황금연휴' }
+    ],
+    '이충선': [
+      { date: '2/13', type: '연차', note: '' },
+      { date: '2/26', type: '연차', note: '병원(어머니)' },
+      { date: '3/13', type: '반차(오후)', note: '병원(어머니)' },
+      { date: '3/25', type: '반반차(오후)', note: '안과' },
+      { date: '4/2', type: '연차', note: '병원(어머니)' },
+      { date: '4/9', type: '반반차(오후)', note: '15:30~' },
+      { date: '4/10', type: '연차', note: '' },
+      { date: '4/17', type: '반차(오후)', note: '병원(어머니)' },
+      { date: '5/4', type: '연차', note: '황금연휴' }
+    ],
+    '이복진': [
+      { date: '1/30', type: '연차', note: '병원진료' },
+      { date: '2/27', type: '연차', note: '병원' },
+      { date: '3/20', type: '연차', note: '병원진료' },
+      { date: '4/10', type: '연차', note: '병원' },
+      { date: '4/30', type: '연차', note: '병원' }
+    ],
+    '황유나': [
+      { date: '1/20', type: '연차', note: '' },
+      { date: '2/13', type: '연차', note: '' },
+      { date: '2/19', type: '반차(오전)', note: '' },
+      { date: '3/27', type: '연차', note: '' },
+      { date: '4/28', type: '연차', note: '' }
+    ],
+    '왕려원': [
+      { date: '2/13', type: '반차(오전)', note: '' },
+      { date: '2/19', type: '연차', note: '' }, { date: '2/20', type: '연차', note: '' },
+      { date: '3/24', type: '반반차(오후)', note: '한의원' },
+      { date: '4/29', type: '반차(오후)', note: '' },
+      { date: '4/30', type: '연차', note: '' }
+    ],
+    '김휘동': [
+      { date: '1/23', type: '반차(오후)', note: '' },
+      { date: '2/19', type: '연차', note: '' }, { date: '2/20', type: '연차', note: '' },
+      { date: '3/20', type: '반반차(오후)', note: '15시 조퇴(병가)' },
+      { date: '4/24', type: '반차(오후)', note: '' },
+      { date: '4/30', type: '연차', note: '' }
+    ],
+    '김선이': [
+      { date: '1/2', type: '연차', note: '' },
+      { date: '2/4', type: '반차(오전)', note: '' },
+      { date: '2/24', type: '연차', note: '병원진료' },
+      { date: '3/27', type: '반반차(오후)', note: '1시간' },
+      { date: '4/2', type: '반차(오후)', note: '병원진료(어머니)' },
+      { date: '4/9', type: '반반차(오후)', note: '개인사정' }
+    ],
+    '류미화': [
+      { date: '3/11', type: '반차(오후)', note: '' },
+      { date: '3/12', type: '연차', note: '' }, { date: '3/13', type: '연차', note: '' },
+      { date: '4/22', type: '반차(오후)', note: '' }
+    ],
+    '박혜련': [
+      { date: '2/19', type: '연차', note: '' },
+      { date: '3/5', type: '연차', note: '' },
+      { date: '4/13', type: '연차', note: '' }
+    ],
+    '박제영': [
+      { date: '1/26', type: '연차', note: '' },
+      { date: '3/30', type: '연차', note: '' },
+      { date: '5/4', type: '연차', note: '황금연휴' }
+    ],
+    '송영근': [
+      { date: '2/6', type: '연차', note: '' },
+      { date: '3/6', type: '반차(오후)', note: '' },
+      { date: '4/6', type: '연차', note: '' }
+    ],
+    '이병준': [
+      { date: '4/13', type: '연차', note: '병원 진료' },
+      { date: '4/24', type: '반반차(오후)', note: '' },
+      { date: '4/29', type: '연차', note: '아내 병원' }
+    ],
+    '여선구': [
+      { date: '2/9', type: '연차', note: '' },
+      { date: '4/13', type: '연차', note: '' }
+    ]
+  },
+  monthlyTotal: { '1월': 5.5, '2월': 15.5, '3월': 9.5, '4월': 17.0, '5월': 3.0 },
+  typeBreakdown: { '종일연차': { count: 41, days: 41, pct: 81 }, '반차': { count: 15, days: 7.5, pct: 15 }, '반반차': { count: 8, days: 2, pct: 4 } },
+  holidays: {
+    '5/1 (금)': '근로자의 날',
+    '5/5 (화)': '어린이날',
+    '5/24 (일)': '부처님오신날',
+    '5/25 (월)': '부처님오신날 대체공휴일'
+  },
+  golden_holidays: {
+    '5/1~5/5': { days: 4, scenario: '기본', detail: '5/1 금(근로자의 날) + 5/2~3 주말 + 5/5 화(어린이날). 5/4 월은 평일.' },
+    '5/1~5/5 with 5/4 leave': { days: 5, scenario: '연차 1일 사용', detail: '5/4(월)에 연차 1일 쓰면 5/1~5/5 5일 연속 휴무. 가성비 최고.' },
+    '5/23~5/25': { days: 3, scenario: '자동', detail: '5/23(토) + 5/24(일·부처님오신날) + 5/25(월·대체공휴일). 연차 없이 3일 연속.' }
+  },
+  may4_applicants: ['이충선', '박제영', '성유진'],
+  totals: { all: 50.5, count: 64, avg: 3.88, peopleCount: 13 }
+};
+
+let messageHistory = [];
+const ROLE_MAP = { '이복진': '차장', '이병준': '팀장' };
+
+function fullName(name) {
+  return name + (ROLE_MAP[name] ? ' ' + ROLE_MAP[name] : '');
+}
+
+function findName(q) {
+  const names = Object.keys(LEAVE_DATA.records);
+  for (const n of names) if (q.includes(n)) return n;
+  return null;
+}
+
+function respondGreeting() {
+  return {
+    text: `안녕하세요, 이병준 팀장님. 무엇을 알려드릴까요?\n\n자주 묻는 것: **Top 3**, **이번 달 휴가자**, **5/4 신청자**, **황금연휴 전략**`,
+    followups: ['Top 3 보여줘', '이번 달 휴가자', '5/4 누가 신청?']
+  };
+}
+
+function respondHelp() {
+  return {
+    text: `**이런 질문을 할 수 있어요**\n\n- **인원 조회** — "성유진은?", "이충선 사용 내역", "이복진 차장은?"\n- **순위·통계** — "Top 3", "1위 누구?", "평균 사용량"\n- **월별 분석** — "월별 추이", "4월 사용량", "이번 달은?"\n- **사유 분석** — "병원 사유 사용자", "5/4에 누가 신청?"\n- **공휴일·연휴** — "5월 공휴일", "황금연휴", "부처님오신날 연휴"\n\n또는 좌측 추천 질문을 눌러보세요.`,
+    followups: ['Top 3 보여줘', '월별 추이', '유형별 분포']
+  };
+}
+
+function respondPerson(name) {
+  const p = LEAVE_DATA.cumulative.find(x => x.name === name);
+  const recs = LEAVE_DATA.records[name];
+  let t = `**${fullName(name)}** · 누계 **${p.total}일** (순위 ${p.rank}위)\n\n`;
+  t += `| 월 | 사용 |\n|---|---|\n`;
+  ['1월','2월','3월','4월','5월'].forEach((m, i) => {
+    t += `| ${m} | ${p.monthly[i] === 0 ? '—' : p.monthly[i] + '일'} |\n`;
+  });
+  t += `\n**상세 기록** (총 ${recs.length}건)\n`;
+  recs.forEach(r => {
+    t += `- ${r.date} ${r.type}${r.note ? ' · _' + r.note + '_' : ''}\n`;
+  });
+  const others = Object.keys(LEAVE_DATA.records).filter(n => n !== name).slice(0, 3);
+  return { text: t, followups: ['Top 3는?', '월별 추이', others[0] + '은?'] };
+}
+
+function respondTop() {
+  const top3 = LEAVE_DATA.cumulative.slice(0, 3);
+  let t = `**누계 Top 3** (2026년 1~5월 기준)\n\n| 순위 | 이름 | 합계 |\n|---|---|---|\n`;
+  top3.forEach(p => {
+    t += `| ${p.rank}위 | ${fullName(p.name)} | **${p.total}일** |\n`;
+  });
+  const gap = (top3[0].total - top3[1].total).toFixed(2);
+  t += `\n1위와 2위 차이는 **${gap}일**입니다. 전체 ${LEAVE_DATA.totals.peopleCount}명 중 인당 평균은 ${LEAVE_DATA.totals.avg}일.`;
+  return { text: t, followups: [top3[0].name + '은?', top3[1].name + '은?', '월별 추이'] };
+}
+
+function respondMay4() {
+  return respondDate(5, 4);
+}
+
+function respondDate(month, day) {
+  const dateKey = month + '/' + day;
+  const found = [];
+  Object.entries(LEAVE_DATA.records).forEach(([name, recs]) => {
+    recs.forEach(r => {
+      if (r.date === dateKey) found.push({ name, type: r.type, note: r.note });
+    });
+  });
+  if (found.length === 0) {
+    return {
+      text: `**${dateKey}** 에는 연차 사용 기록이 없습니다.`,
+      followups: ['이번 달 휴가자', 'Top 3', '월별 추이']
+    };
+  }
+  let t = `**${dateKey} 연차 사용자 — ${found.length}명**\n\n`;
+  found.forEach(f => {
+    t += `- ${fullName(f.name)} · ${f.type}${f.note ? ' (' + f.note + ')' : ''}\n`;
+  });
+  return { text: t, followups: ['Top 3는?', '이번 달 휴가자', '월별 추이'] };
+}
+
+function respondType() {
+  const tb = LEAVE_DATA.typeBreakdown;
+  const totalCount = tb['종일연차'].count + tb['반차'].count + tb['반반차'].count;
+  let t = `**연차 유형 분포** (2026년 누계 ${totalCount}건)\n\n| 유형 | 건수 | 비율 |\n|---|---|---|\n`;
+  t += `| 종일연차 | ${tb['종일연차'].count}건 | ${tb['종일연차'].pct}% |\n`;
+  t += `| 반차 | ${tb['반차'].count}건 | ${tb['반차'].pct}% |\n`;
+  t += `| 반반차 | ${tb['반반차'].count}건 | ${tb['반반차'].pct}% |\n\n`;
+  if (tb['종일연차'].pct >= 50) {
+    t += `종일연차가 ${tb['종일연차'].pct}%로 대부분을 차지합니다.`;
+  }
+  return { text: t, followups: ['월별 추이', 'Top 3', '병원 사유 사용자'] };
+}
+
+function respondMonthly() {
+  const m = LEAVE_DATA.monthlyTotal;
+  const maxMonth = Object.entries(m).reduce((a, b) => b[1] > a[1] ? b : a);
+  const today = new Date();
+  const currentMonthLabel = (today.getMonth() + 1) + '월';
+  let t = `**회사 전체 월별 사용량**\n\n| 월 | 사용일 |\n|---|---|\n`;
+  Object.entries(m).forEach(([k, v]) => {
+    let mark = '';
+    if (k === maxMonth[0] && v > 0) mark = ' ← 최대';
+    else if (k === currentMonthLabel) mark = ' (진행중)';
+    t += `| ${k} | **${v}일**${mark} |\n`;
+  });
+  t += `\n**누계 ${LEAVE_DATA.totals.all}일** · ${maxMonth[0]}이 ${maxMonth[1]}일로 가장 많은 사용월입니다.`;
+  return { text: t, followups: ['유형별 분포', 'Top 3', '이번 달 휴가자'] };
+}
+
+function respondHoliday() {
+  let t = `**5월 공휴일**\n\n`;
+  Object.entries(LEAVE_DATA.holidays).forEach(([d, name]) => {
+    t += `- **${d}** ${name}\n`;
+  });
+  t += `\n**연속 휴무 가능한 구간**\n- 5/1 ~ 5/3 (3일, 자동)\n- 5/5 단독 (5/4가 평일이라 끊김)\n- 5/4 연차 시 → **5/1 ~ 5/5 (5일 연속)**\n- 5/23 ~ 5/25 (3일, 자동)`;
+  return { text: t, followups: ['황금연휴 전략', '5/4 신청자', '5월 인력 공백'] };
+}
+
+function respondGolden() {
+  const may4 = collectMayApplicants(4);
+  let t = `**5월 황금연휴 전략**\n\n**시나리오 1 — 5/4(월) 연차 1일** ⭐\n5/1(금) ~ 5/5(화) **5일 연속 휴무**\n`;
+  if (may4.length) {
+    t += `현재 ${may4.length}명 신청: ${may4.map(n => fullName(n)).join(', ')}\n\n`;
+  } else {
+    t += `현재 신청자 없음\n\n`;
+  }
+  t += `**시나리오 2 — 5/23~5/25 (자동)**\n5/23(토) + 5/24(일·부처님오신날) + 5/25(월·대체공휴일)\n**3일 연속**, 연차 사용 없이 가능\n\n**시나리오 3 — 5/22(금) 추가 연차**\n5/22~5/25 **4일 연속** 가능`;
+  return { text: t, followups: ['5/4 신청자', '5월 공휴일', '5월 인력 공백'] };
+}
+
+function respondMedical() {
+  const medical = {};
+  Object.entries(LEAVE_DATA.records).forEach(([name, recs]) => {
+    const matches = recs.filter(r => /병원|병가|진료|한의원|안과|치과/.test(r.note));
+    if (matches.length) medical[name] = matches;
+  });
+  if (Object.keys(medical).length === 0) {
+    return {
+      text: '병원·의료 사유로 사용된 연차 기록이 없습니다.',
+      followups: ['Top 3는?', '월별 추이', '유형별 분포']
+    };
+  }
+  const sorted = Object.entries(medical).sort((a, b) => b[1].length - a[1].length);
+  let t = `**병원·의료 사유 연차 사용 직원** (${sorted.length}명)\n\n| 이름 | 건수 | 주요 사유 |\n|---|---|---|\n`;
+  sorted.forEach(([n, recs]) => {
+    const notes = [...new Set(recs.map(r => r.note))].slice(0, 2).join(', ');
+    t += `| ${fullName(n)} | ${recs.length}건 | ${notes} |\n`;
+  });
+  const top = sorted[0];
+  t += `\n**${fullName(top[0])}**이 ${top[1].length}건으로 가장 많습니다.`;
+  return { text: t, followups: [sorted[0][0] + '은?', 'Top 3', '월별 추이'] };
+}
+
+function collectMayApplicants(day) {
+  const result = [];
+  Object.entries(LEAVE_DATA.records).forEach(([name, recs]) => {
+    recs.forEach(r => {
+      const m = r.date.match(/(\d+)\/(\d+)/);
+      if (m && +m[1] === 5 && +m[2] === day) result.push(name);
+    });
+  });
+  return [...new Set(result)];
+}
+
+function respondThisMonth() {
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const monthLabel = month + '월';
+  const monthApplications = [];
+
+  Object.entries(LEAVE_DATA.records).forEach(([name, recs]) => {
+    recs.forEach(r => {
+      const m = r.date.match(/(\d+)\/(\d+)/);
+      if (m && +m[1] === month) {
+        monthApplications.push({ name, date: r.date, day: +m[2], type: r.type, note: r.note });
+      }
+    });
+  });
+
+  if (monthApplications.length === 0) {
+    return {
+      text: `**${monthLabel} 연차 신청 현황**\n\n현재까지 신청된 연차가 없습니다.`,
+      followups: ['Top 3는?', '월별 추이', '5월 공휴일']
+    };
+  }
+
+  monthApplications.sort((a, b) => a.day - b.day);
+  const byDate = {};
+  monthApplications.forEach(a => {
+    if (!byDate[a.date]) byDate[a.date] = [];
+    byDate[a.date].push(a);
+  });
+
+  const totalDays = monthApplications.reduce((s, a) => {
+    if (a.type.indexOf('반반차') !== -1) return s + 0.25;
+    if (a.type.indexOf('반차') !== -1) return s + 0.5;
+    return s + 1;
+  }, 0);
+
+  let t = `**${monthLabel} 연차 신청 현황**\n\n신청 건수: **${monthApplications.length}건** · 합산 **${Math.round(totalDays * 100) / 100}일**\n\n`;
+
+  Object.entries(byDate).forEach(([date, items]) => {
+    if (items.length > 1) {
+      t += `**${date}** · ${items.length}명 동시\n`;
+    } else {
+      t += `**${date}**\n`;
+    }
+    items.forEach(i => {
+      t += `- ${fullName(i.name)} · ${i.type}${i.note ? ' (' + i.note + ')' : ''}\n`;
+    });
+    t += '\n';
+  });
+
+  return {
+    text: t.trim(),
+    followups: ['Top 3는?', '5월 인력 공백', '황금연휴 전략']
+  };
+}
+
+function respondAvg() {
+  const c = LEAVE_DATA.cumulative;
+  if (c.length === 0) return respondFallback('');
+  const top = c[0];
+  const bottom = c[c.length - 1];
+  const avg = LEAVE_DATA.totals.avg;
+  const topRatio = (top.total / avg).toFixed(2);
+  const bottomRatio = (bottom.total / avg).toFixed(2);
+  const top3Sum = c.slice(0, 3).reduce((s, p) => s + p.total, 0);
+  const top3Pct = Math.round((top3Sum / LEAVE_DATA.totals.all) * 100);
+  const top3Names = c.slice(0, 3).map(p => p.name).join('·');
+
+  let t = `**인당 평균 사용**\n\n`;
+  t += `- 전체: **${avg}일** (${LEAVE_DATA.totals.all}일 ÷ ${LEAVE_DATA.totals.peopleCount}명)\n`;
+  t += `- 1위 ${fullName(top.name)}: **${top.total}일** (평균의 ${topRatio}배)\n`;
+  t += `- 최저 ${fullName(bottom.name)}: **${bottom.total}일** (평균의 ${bottomRatio}배)\n\n`;
+  t += `상위 3명(${top3Names})이 **${top3Sum.toFixed(2)}일**로 전체의 ${top3Pct}%를 차지합니다.`;
+  return {
+    text: t,
+    followups: ['Top 3는?', '월별 추이', '유형별 분포']
+  };
+}
+
+function respondManpower() {
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const monthLabel = month + '월';
+
+  // 현재 월의 모든 신청을 날짜별로 그룹핑
+  const byDate = {};
+  Object.entries(LEAVE_DATA.records).forEach(([name, recs]) => {
+    recs.forEach(r => {
+      const m = r.date.match(/(\d+)\/(\d+)/);
+      if (m && +m[1] === month) {
+        if (!byDate[r.date]) byDate[r.date] = [];
+        byDate[r.date].push(name);
+      }
+    });
+  });
+
+  // 2명 이상 동시 휴무인 날짜만 필터
+  const concurrent = Object.entries(byDate).filter(([_, names]) => names.length >= 2);
+  concurrent.sort((a, b) => b[1].length - a[1].length);
+
+  let t = `**${monthLabel} 인력 공백 분석**\n\n전체 ${LEAVE_DATA.totals.peopleCount}명 기준\n\n`;
+
+  if (concurrent.length === 0) {
+    const singles = Object.entries(byDate).length;
+    if (singles === 0) {
+      t += '신청된 연차가 없어 인력 공백 우려 날짜가 없습니다.';
+    } else {
+      t += `현재 ${monthLabel} 연차 신청은 모두 단독 사용입니다. 동시 휴무로 인한 인력 공백 우려는 없습니다.`;
+    }
+  } else {
+    t += `**동시 휴무 날짜 (2명 이상)**\n\n`;
+    concurrent.forEach(([date, names]) => {
+      const pct = Math.round((names.length / LEAVE_DATA.totals.peopleCount) * 100);
+      t += `- **${date}** · ${names.length}명 (${pct}%) — ${names.map(fullName).join(', ')}\n`;
+    });
+    t += `\n> 동시 휴무 날짜에 외부 일정이나 중요 업무가 있다면 잔류 인원 사전 분담을 권장합니다.`;
+  }
+
+  return {
+    text: t,
+    followups: ['이번 달 휴가자', '황금연휴 전략', 'Top 3'] 
+  };
+}
+
+function respondFallback(query) {
+  return {
+    text: `질문 의도를 파악하지 못했어요. 다음과 같이 물어봐 주세요.\n\n- 인원명 (예: "성유진은?", "이충선 사용 내역")\n- 날짜 (예: "4/13에 누가?", "5/4는?")\n- 통계 (예: "Top 3", "유형별 분포", "월별 추이")\n- 사유 (예: "병원 사유", "이번 달 휴가자")`,
+    followups: ['Top 3 보여줘', '이번 달 휴가자', '도움말']
+  };
+}
+
+function classifyAndRespond(query) {
+  const q = query.trim();
+  if (!q) return respondFallback(q);
+
+  if (/^(안녕|하이|hello|hi|반가워|좋은 아침)/i.test(q)) return respondGreeting();
+  if (/도움|help|뭐.*할|뭘.*할|기능|할 수 있/.test(q)) return respondHelp();
+
+  const name = findName(q);
+  if (name) return respondPerson(name);
+
+  if (/인력.*공백|공백|동시.*휴/.test(q)) return respondManpower();
+  if (/병원|의료|진료|아픈|병가/.test(q)) return respondMedical();
+  if (/평균|avg/i.test(q)) return respondAvg();
+  if (/top|순위|1위|2위|3위|최다|많이 쓴|많이 사용/i.test(q)) return respondTop();
+  if (/황금연휴|장기.*휴|연휴 전략|연휴 어떻/.test(q)) return respondGolden();
+  if (/공휴일|어린이날|부처님|근로자의 날|대체공휴일/.test(q)) return respondHoliday();
+  if (/유형|종일.*반차|반차.*종일|반반차|분포|비율/.test(q)) return respondType();
+  if (/월별|추이|전체.*사용|회사.*사용|트렌드/.test(q)) return respondMonthly();
+  if (/이번 ?달|5월/.test(q) && !/공휴일/.test(q)) return respondThisMonth();
+
+  const dateMatch = q.match(/(\d{1,2})\s*[\/월]\s*(\d{1,2})/);
+  if (dateMatch) return respondDate(+dateMatch[1], +dateMatch[2]);
+
+  return respondFallback(q);
+}
+
+function nowTime() {
+  const d = new Date();
+  return d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function renderMarkdown(text) {
+  if (typeof marked !== 'undefined') {
+    marked.setOptions({ breaks: true, gfm: true });
+    return marked.parse(text);
+  }
+  return escapeHtml(text).replace(/\n/g, '<br>');
+}
+
+function appendMessage(role, content, opts = {}) {
+  const inner = document.getElementById('messagesInner');
+  const msg = document.createElement('div');
+  msg.className = 'msg ' + role;
+  const avatar = role === 'bot' ? '비' : '이';
+  const bubbleContent = role === 'bot' ? renderMarkdown(content) : escapeHtml(content).replace(/\n/g, '<br>');
+  msg.innerHTML = `
+    <div class="msg-avatar ${role}">${avatar}</div>
+    <div>
+      <div class="msg-bubble">${bubbleContent}</div>
+      <div class="msg-time">${nowTime()}</div>
+    </div>
+  `;
+  if (opts.followups && opts.followups.length) {
+    const bubble = msg.querySelector('.msg-bubble');
+    const fc = document.createElement('div');
+    fc.className = 'followups';
+    opts.followups.forEach(f => {
+      const c = document.createElement('button');
+      c.className = 'followup-chip';
+      c.textContent = f;
+      c.onclick = () => askChip(f);
+      fc.appendChild(c);
+    });
+    bubble.appendChild(fc);
+  }
+  inner.appendChild(msg);
+  scrollToBottom();
+}
+
+function appendLoading() {
+  const inner = document.getElementById('messagesInner');
+  const msg = document.createElement('div');
+  msg.className = 'msg bot';
+  msg.id = 'loadingMsg';
+  msg.innerHTML = `
+    <div class="msg-avatar bot">비</div>
+    <div>
+      <div class="msg-bubble">
+        <div class="typing">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      </div>
+    </div>
+  `;
+  inner.appendChild(msg);
+  scrollToBottom();
+}
+
+function removeLoading() {
+  const l = document.getElementById('loadingMsg');
+  if (l) l.remove();
+}
+
+function scrollToBottom() {
+  const m = document.getElementById('messages');
+  setTimeout(() => m.scrollTop = m.scrollHeight, 50);
+}
+
+function askLocal(question) {
+  messageHistory.push({ role: 'user', content: question });
+  appendLoading();
+  setTimeout(() => {
+    removeLoading();
+    const result = classifyAndRespond(question);
+    messageHistory.push({ role: 'assistant', content: result.text });
+    appendMessage('bot', result.text, { followups: result.followups });
+  }, 350);
+}
+
+function askChip(text) {
+  appendMessage('user', text);
+  askLocal(text);
+  const sb = document.getElementById('sidebar');
+  if (sb && sb.classList.contains('open')) sb.classList.remove('open');
+}
+
+function handleSubmit(e) {
+  e.preventDefault();
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text) return false;
+  appendMessage('user', text);
+  input.value = '';
+  input.style.height = 'auto';
+  askLocal(text);
+  return false;
+}
+
+function resetChat() {
+  if (!confirm('대화를 처음부터 다시 시작하시겠어요?')) return;
+  messageHistory = [];
+  document.getElementById('messagesInner').innerHTML = `
+    <div class="welcome-card">
+      <div class="welcome-greeting">안녕하세요, 이병준 팀장님</div>
+      <div class="welcome-desc">세인바이오 연월차 비서입니다. 인원별 사용 현황, 월별 통계, 5월 공휴일 연동까지 무엇이든 물어보세요.<br>왼쪽 추천 질문을 누르거나 아래 입력창에 직접 질문해 보세요.</div>
+    </div>
+  `;
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// Textarea auto-resize and Enter handling
+const input = document.getElementById('userInput');
+input.addEventListener('input', () => {
+  input.style.height = 'auto';
+  input.style.height = Math.min(input.scrollHeight, 140) + 'px';
+});
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    document.getElementById('inputForm').requestSubmit();
+  }
+});
+
+// Focus input on load
+window.addEventListener('load', () => {
+  input.focus();
+  loadLiveData();
+});
+
+// ========== 실시간 데이터 로드 ==========
+
+function cleanName(raw) {
+  if (!raw) return '';
+  let n = String(raw).trim();
+  // 슬랙 멘션 형식 처리: @이름, <@USERID|이름>, <@USERID>
+  const mentionMatch = n.match(/<@[A-Z0-9]+\|([^>]+)>/);
+  if (mentionMatch) return mentionMatch[1].trim();
+  if (n.startsWith('@')) n = n.slice(1);
+  // 직급 제거 (성, 이름 보존)
+  n = n.replace(/\s*(차장|팀장|과장|책임|대리|사원|부장|이사|상무)$/, '');
+  return n.trim();
+}
+
+function calcDays(type) {
+  if (!type) return 0;
+  const t = String(type);
+  if (t.indexOf('종일') !== -1) return 1.0;
+  if (t.indexOf('반반차') !== -1) return 0.25;
+  if (t.indexOf('반차') !== -1) return 0.5;
+  return 0;
+}
+
+function parseDateMonth(dateStr) {
+  if (!dateStr) return null;
+  const s = String(dateStr);
+  // YYYY-MM-DD
+  let m = s.match(/^\d{4}-(\d{1,2})-(\d{1,2})/);
+  if (m) return { month: +m[1], day: +m[2] };
+  // MM/DD or M/D
+  m = s.match(/^(\d{1,2})[\/\-](\d{1,2})/);
+  if (m) return { month: +m[1], day: +m[2] };
+  // YYYY/MM/DD
+  m = s.match(/^\d{4}[\/\-](\d{1,2})[\/\-](\d{1,2})/);
+  if (m) return { month: +m[1], day: +m[2] };
+  return null;
+}
+
+function shortDate(dateStr) {
+  const p = parseDateMonth(dateStr);
+  return p ? `${p.month}/${p.day}` : String(dateStr);
+}
+
+function transformApiData(apiData) {
+  const raw = (apiData.records || []).filter(r => r.name && r.type);
+
+  // 이름별 그룹
+  const byPerson = {};
+  raw.forEach(r => {
+    const name = cleanName(r.name);
+    if (!name) return;
+    const parsed = parseDateMonth(r.date);
+    const days = (typeof r.days === 'number') ? r.days : calcDays(r.type);
+    if (!byPerson[name]) byPerson[name] = [];
+    byPerson[name].push({
+      date: r.date,
+      shortDate: shortDate(r.date),
+      type: r.type,
+      note: r.note || '',
+      days: days,
+      month: parsed ? parsed.month : 0
+    });
+  });
+
+  // 인원별 월별 누계
+  const cumulative = [];
+  Object.entries(byPerson).forEach(([name, recs]) => {
+    const monthly = [0, 0, 0, 0, 0]; // 1~5월만 표시
+    recs.forEach(r => {
+      if (r.month >= 1 && r.month <= 5) monthly[r.month - 1] += r.days;
+    });
+    monthly.forEach((v, i) => monthly[i] = Math.round(v * 100) / 100);
+    const total = Math.round(monthly.reduce((a, b) => a + b, 0) * 100) / 100;
+    cumulative.push({ name, monthly, total });
+  });
+  cumulative.sort((a, b) => b.total - a.total);
+  cumulative.forEach((p, i) => p.rank = i + 1);
+
+  // 월별 합계
+  const monthlyTotal = {};
+  ['1월','2월','3월','4월','5월'].forEach((label, i) => {
+    const sum = cumulative.reduce((s, p) => s + p.monthly[i], 0);
+    monthlyTotal[label] = Math.round(sum * 100) / 100;
+  });
+
+  // 유형 분포
+  let countFull = 0, countHalf = 0, countQuarter = 0;
+  raw.forEach(r => {
+    const t = String(r.type || '');
+    if (t.indexOf('반반차') !== -1) countQuarter++;
+    else if (t.indexOf('반차') !== -1) countHalf++;
+    else if (t.indexOf('종일') !== -1) countFull++;
+  });
+  const totalTypeCount = countFull + countHalf + countQuarter;
+  const typeBreakdown = {
+    '종일연차': { count: countFull, days: countFull, pct: totalTypeCount ? Math.round(countFull / totalTypeCount * 100) : 0 },
+    '반차': { count: countHalf, days: countHalf * 0.5, pct: totalTypeCount ? Math.round(countHalf / totalTypeCount * 100) : 0 },
+    '반반차': { count: countQuarter, days: countQuarter * 0.25, pct: totalTypeCount ? Math.round(countQuarter / totalTypeCount * 100) : 0 }
+  };
+
+  // 인원별 기록 (날짜순)
+  const records = {};
+  Object.entries(byPerson).forEach(([name, recs]) => {
+    records[name] = recs
+      .slice()
+      .sort((a, b) => (a.month - b.month) || String(a.date).localeCompare(String(b.date)))
+      .map(r => ({ date: r.shortDate, type: r.type, note: r.note }));
+  });
+
+  // 5/4 신청자
+  const may4 = raw
+    .filter(r => {
+      const p = parseDateMonth(r.date);
+      return p && p.month === 5 && p.day === 4;
+    })
+    .map(r => cleanName(r.name));
+
+  // 총계
+  const allTotal = Math.round(cumulative.reduce((s, p) => s + p.total, 0) * 100) / 100;
+  const peopleCount = cumulative.length;
+  const avg = peopleCount ? Math.round(allTotal / peopleCount * 100) / 100 : 0;
+
+  return {
+    today: LEAVE_DATA.today,
+    holidays: LEAVE_DATA.holidays,
+    golden_holidays: LEAVE_DATA.golden_holidays,
+    cumulative,
+    records,
+    monthlyTotal,
+    typeBreakdown,
+    may4_applicants: [...new Set(may4)],
+    totals: { all: allTotal, count: raw.length, avg, peopleCount },
+    updated: apiData.updated || new Date().toISOString()
+  };
+}
+
+function updateSidebarStats() {
+  const t = LEAVE_DATA.totals;
+  const c = LEAVE_DATA.cumulative;
+  document.getElementById('dataTotal').textContent = t.all + '일';
+  document.getElementById('dataAvg').textContent = t.avg + '일';
+  document.getElementById('dataCount').textContent = t.count + '건';
+  document.getElementById('dataTop').textContent = c.length ? (c[0].name + ' ' + c[0].total + '일') : '—';
+}
+
+function updateStatusPill(text, isError) {
+  const pill = document.getElementById('statusPill');
+  pill.textContent = text;
+  pill.style.background = isError ? 'rgba(220, 80, 80, 0.18)' : 'rgba(255,255,255,0.08)';
+}
+
+function formatUpdatedTime(iso) {
+  try {
+    const d = new Date(iso);
+    const mm = (d.getMonth() + 1).toString().padStart(2, '0');
+    const dd = d.getDate().toString().padStart(2, '0');
+    const hh = d.getHours().toString().padStart(2, '0');
+    const mi = d.getMinutes().toString().padStart(2, '0');
+    return `${mm}/${dd} ${hh}:${mi}`;
+  } catch {
+    return iso;
+  }
+}
+
+async function loadLiveData() {
+  updateStatusPill('데이터 불러오는 중…', false);
+  try {
+    const res = await fetch(API_URL, { method: 'GET', redirect: 'follow' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const apiData = await res.json();
+    if (apiData.error) throw new Error(apiData.error);
+    if (!apiData.records || apiData.records.length === 0) throw new Error('데이터가 비어있습니다');
+
+    const transformed = transformApiData(apiData);
+    LEAVE_DATA = transformed;
+    updateSidebarStats();
+    updateStatusPill('시트 연동 · ' + formatUpdatedTime(transformed.updated), false);
+    console.log('실시간 데이터 로드 완료:', transformed);
+  } catch (err) {
+    console.error('데이터 로드 실패:', err);
+    updateSidebarStats(); // 폴백 데이터로
+    updateStatusPill('연결 실패 · 오프라인 데이터 사용', true);
+  }
+}
+
+function refreshData() {
+  loadLiveData();
+}
+</script>
+</body>
+</html>
